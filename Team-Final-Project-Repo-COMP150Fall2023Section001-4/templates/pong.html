@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pong Game</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-vader.css" type="text/css"> 
+    <style>
+        canvas {
+            background: #000;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="pong" width="800" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("pong");
+        const ctx = canvas.getContext("2d");
+
+        // Paddle and ball variables
+        const paddleWidth = 10;
+        const paddleHeight = 100;
+        let playerY = (canvas.height - paddleHeight) / 2;
+        let computerY = (canvas.height - paddleHeight) / 2;
+        let ballX = canvas.width / 2;
+        let ballY = canvas.height / 2;
+        let ballSpeedX = 5;
+        let ballSpeedY = 5;
+
+        // Score variables
+        let userScore = 0;
+        let computerScore = 0;
+        const winningScore = 10; // Score needed to win the match
+
+        // Draw functions
+        function drawRect(x, y, width, height, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, width, height);
+        }
+
+        function drawCircle(x, y, radius, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+            ctx.fill();
+        }
+
+        // Computer AI
+        function computerAI() {
+            const computerCenter = computerY + paddleHeight / 2;
+            if (computerCenter < ballY - 35) {
+                computerY += 5; // Move the computer paddle down
+            } else if (computerCenter > ballY + 35) {
+                computerY -= 5; // Move the computer paddle up
+            }
+        }
+
+        // Update game state
+        function update() {
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
+
+            // Ball collision with top and bottom walls
+            if (ballY < 0 || ballY > canvas.height) {
+                ballSpeedY = -ballSpeedY;
+            }
+
+            // Ball collision with paddles
+            if (ballX < paddleWidth) {
+                if (ballY > playerY && ballY < playerY + paddleHeight) {
+                    ballSpeedX = -ballSpeedX;
+                }
+            } else if (ballX > canvas.width - paddleWidth) {
+                if (ballY > computerY && ballY < computerY + paddleHeight) {
+                    ballSpeedX = -ballSpeedX;
+                }
+            }
+
+            // Ball out of bounds (missed)
+            if (ballX < 0) {
+                computerScore++;
+                resetBall();
+            } else if (ballX > canvas.width) {
+                userScore++;
+                resetBall();
+            }
+
+            // Check for a winner
+            if (userScore >= winningScore || computerScore >= winningScore) {
+                // Declare the winner and reset the scores
+                alert(userScore >= winningScore ? "User wins!" : "Computer wins!");
+                resetGame();
+            }
+        }
+
+        // Reset the ball position
+        function resetBall() {
+            ballX = canvas.width / 2;
+            ballY = canvas.height / 2;
+            ballSpeedX = -ballSpeedX;
+        }
+
+        // Reset the game
+        function resetGame() {
+            userScore = 0;
+            computerScore = 0;
+            playerY = (canvas.height - paddleHeight) / 2;
+            computerY = (canvas.height - paddleHeight) / 2;
+            resetBall();
+        }
+
+        // Main game loop
+        function gameLoop() {
+            update();
+            computerAI();
+
+            // Clear canvas
+            drawRect(0, 0, canvas.width, canvas.height, "#000");
+
+            // Draw paddles
+            drawRect(0, playerY, paddleWidth, paddleHeight, "#FFF");
+            drawRect(canvas.width - paddleWidth, computerY, paddleWidth, paddleHeight, "#FFF");
+
+            // Draw ball
+            drawCircle(ballX, ballY, 10, "#FFF");
+
+            // Display the scores
+            ctx.fillStyle = "#FFF";
+            ctx.font = "20px Arial";
+            ctx.fillText("User Score: " + userScore, 20, 30);
+            ctx.fillText("Computer Score: " + computerScore, canvas.width - 220, 30);
+        }
+
+        // Handle user input
+        canvas.addEventListener("mousemove", (e) => {
+            const mouseY = e.clientY - canvas.getBoundingClientRect().top;
+            playerY = mouseY - paddleHeight / 2;
+        });
+
+        // Start the game loop
+        setInterval(gameLoop, 1000 / 60); // 60 frames per second
+    </script>
+</body>
+</html>
+
+
+<button id="resetButton" onclick="resetGame()">Reset Game</button>
+</div>
+<div>
+  <a href="/main_page">Go to Main Page</a> 
+  </div>
+
+<div>
+  <a href="/shop">Go to Shop</a> 
+</div>
+

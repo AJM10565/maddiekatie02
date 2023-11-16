@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Button Pressing Game</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-vader.css" type="text/css">
+</head>
+<body>
+    <h1>Button Pressing Game</h1>
+    <div id="userInfo">
+        User: <span id="username">John Doe</span>
+    </div>
+    <button id="pressButton">Press Me!</button>
+    <p id="countDisplay">Count: 0</p>
+    <p id="globalCurrencyDisplay">Global Currency: <span id="currencyValue">0</span></p>
+
+    <script>
+        let count = 0;
+
+        function incrementCount() {
+            count++;
+            document.getElementById("countDisplay").textContent = `Count: ${count}`;
+
+            if (count % 10 === 0) {
+                updateGlobalCurrencyOnServer(count / 10);
+            }
+        }
+
+        function updateGlobalCurrencyOnServer(currency) {
+            fetch('/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ currency }),
+            })
+            .then((response) => response.json())
+            .then(() => {
+                getGlobalCurrencyFromServer();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        function getGlobalCurrencyFromServer() {
+            fetch('/get', {
+                method: 'GET',
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.globalCurrency) {
+                    document.getElementById("currencyValue").textContent = data.globalCurrency;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        document.getElementById("pressButton").addEventListener("click", incrementCount);
+
+        // Initialize the currency display
+        getGlobalCurrencyFromServer();
+    </script>
+
+   <script src="{{ url_for('static', filename='js/user-info.js') }}"></script>
+</body>
+</html>
+<div>
+  <a href="/shop">Go to Shop</a>
+</div>
+
+<div>
+  <a href="/main_page"> Go to Main Page</a>
+</div>

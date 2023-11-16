@@ -1,0 +1,40 @@
+.
+├── out.txt
+├── sprites
+│   ├── ground.png
+│   ├── hero-sheet.png
+│   ├── rod.png
+│   ├── shadow.png
+│   ├── sky.png
+│   └── spritesheet.png
+└── src
+    ├── Animations.js
+    ├── Camera.js
+    ├── Events.js
+    ├── FrameIndexPattern.js
+    ├── GameLoop.js
+    ├── GameObject.js
+    ├── Input.js
+    ├── Resource.js
+    ├── Sprite.js
+    ├── Vector2.js
+    ├── buttonpressing.js
+    ├── helpers
+    │   ├── grid.js
+    │   └── moveTowards.js
+    ├── levels
+    │   └── level1.js
+    ├── objects
+    │   ├── Hero
+    │   │   ├── Hero.js
+    │   │   └── heroAnimations.js
+    │   ├── Inventory
+    │   │   └── Inventory.js
+    │   └── Rod
+    │       └── Rod.js
+    ├── pong.js
+    ├── shop.js
+    ├── start.js
+    └── user-info.js
+
+8 directories, 29 files

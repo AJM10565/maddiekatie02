@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shop</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-vader.css" type="text/css">
+</head>
+<body>
+    <h1>Shop</h1>
+    <div id="userInfo">
+        User: <span id="username"></span>
+    </div>
+    <p>Available Games:</p>
+    <ul>
+        <li>
+            <span>Game 1</span>
+            <button onclick="purchaseGame(1, 50)">Buy for 50 Global Currency</button>
+        </li>
+        <!-- Add more games with their respective prices and buttons -->
+    </ul>
+    <p id="globalCurrencyDisplay">Global Currency: <span id="currencyValue">0</span></p>
+
+    <script>
+        function getGlobalCurrencyFromServer() {
+            fetch('/get', {
+                method: 'GET',
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.globalCurrency) {
+                    document.getElementById("currencyValue").textContent = data.globalCurrency;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Initialize the currency display
+        getGlobalCurrencyFromServer();
+    </script>
+</body>
+</html>
+
+<a href="/main_page">Go to Main Page</a>
